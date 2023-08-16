@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const pageRoute = require("./routers/pageRoute");
 const courseRoute = require("./routers/courseRoute");
+const categoryRoute = require("./routers/categoryRoute");
 const app = express();
 
 // Connect DB
@@ -16,9 +17,11 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 // Routes
 app.use("/", pageRoute);
 app.use("/courses", courseRoute);
+app.use("/categories", categoryRoute);
 
 const port = 3000;
 app.listen(port, () => {
