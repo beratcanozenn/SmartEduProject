@@ -18,25 +18,14 @@ exports.createUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    await User.findOne({ email }, (err, user) => {
-      if (user) {
-        bcrypt.compare(password, user.password, (err, same) => {
-          if (same) {
-            // User Session
-            res.status(200).send("You are logged in");
-          }
-        });
-      }
-    });
-
-    const { email, password } = req.body;
     const user = await User.findOne({ email });
+    req.session.userID = user._id;
     if (!user) {
       res.status(400).send("kullanici yok");
     }
     const same = await bcrypt.compare(password, user.password);
     if (same) {
-      res.status(200).send("login");
+      res.status(200).redirect("/");
     }
   } catch (error) {
     res.status(400).json({
