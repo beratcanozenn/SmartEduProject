@@ -28,7 +28,9 @@ exports.getAllCourse = async (req, res) => {
 
 exports.getCourse = async (req, res) => {
   try {
-    const course = await Course.findOne({ slug: req.params.slug });
+    const course = await Course.findOne({ slug: req.params.slug }).populate(
+      "user"
+    );
     res.status(200).render("course", {
       course,
       page_name: course.name,
@@ -43,7 +45,12 @@ exports.getCourse = async (req, res) => {
 
 exports.createCourse = async (req, res) => {
   try {
-    const course = await Course.create(req.body);
+    const course = await Course.create({
+      name: req.body.name,
+      description: req.body.description,
+      user: req.session.userID,
+    });
+
     res.status(201).redirect("/courses");
   } catch (error) {
     res.status(400).json({
