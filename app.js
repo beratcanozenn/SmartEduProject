@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+var flash = require("connect-flash");
 const pageRoute = require("./routers/pageRoute");
 const courseRoute = require("./routers/courseRoute");
 const categoryRoute = require("./routers/categoryRoute");
@@ -34,6 +35,11 @@ app.use(
 );
 app.use("*", (req, res, next) => {
   userIN = req.session.userID;
+  next();
+});
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.flashMessages = req.flash();
   next();
 });
 

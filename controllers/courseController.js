@@ -72,13 +72,11 @@ exports.createCourse = async (req, res) => {
       category: req.body.category,
       user: req.session.userID,
     });
-
+    req.flash("success", `${course.name} Başarıyla oluşturuldu.`);
     res.status(201).redirect("/courses");
   } catch (error) {
-    res.status(400).json({
-      status: "Fail",
-      error,
-    });
+    req.flash("error", `Kurs Oluşturulamadı`);
+    res.status(400).redirect("/courses");
   }
 };
 
